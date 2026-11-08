@@ -1,0 +1,29 @@
+# Minecraft Language Editor
+
+## Descripción
+
+Minecraft Language Editor es una extensión para Visual Studio Code desarrollada para facilitar la edición, traducción y organización de archivos de idioma (`.lang`) de Minecraft Bedrock Edition.
+
+La extensión surgió como una herramienta personal para mejorar el flujo de trabajo durante la traducción de archivos de idioma y otros archivos de texto que contienen contenido traducible.
+
+Su objetivo es simplificar el proceso de traducción, mejorar la organización de las claves y facilitar el mantenimiento de los archivos de idioma, especialmente en proyectos de Resource Packs y Add-ons de Minecraft Bedrock.
+
+## Características
+
+- Edición de archivos `.lang` mediante una tabla de traducciones.
+- Visualización del texto original y su traducción.
+- Organización y diferenciación de claves mediante colores.
+- Creación de copias de seguridad antes de modificar archivos.
+- Gestión de idiomas mediante `languages.json`.
+- Compatibilidad con la herencia de traducciones de versiones anteriores.
+- Herramientas para facilitar la sincronización y el mantenimiento de traducciones.
+
+## Objetivo
+
+Esta extensión busca proporcionar una herramienta práctica y accesible para quienes trabajan con traducciones de Minecraft Bedrock Edition, reduciendo las dificultades de edición manual y facilitando la actualización de archivos de idioma.
+
+El proyecto se desarrolla con el propósito de mejorar continuamente la experiencia de traducción y ofrecer funcionalidades que permitan trabajar de manera más organizada y eficiente.
+
+## Repositorio
+
+[GitHub — Minecraft Language Editor](https://github.com/Roxter2494/Minecraft-Language-Editor)
