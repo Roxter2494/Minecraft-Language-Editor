@@ -1,0 +1,275 @@
+
+{
+  "name": "minecraft-bedrock-language-editor",
+  "displayName": "Minecraft Bedrock Language Editor",
+  "description": "Editor de archivos .lang de Minecraft Bedrock: tabla origen/destino con búsqueda y filtro, herencia de versiones, comparación de carpetas, detección de textos, traducción y revisión con IA, glosario, nombres propios, borrador persistente, backups con rotación, languages.json, sincronización es_ES/es_MX, resaltado de sintaxis y colores por familia de claves.",
+  "version": "0.6.0",
+  "publisher": "Roxter",
+  "author": "Roxter",
+  "license": "GPL-3.0-or-later",
+  "icon": "media/icon-marketplace-v2.png",
+  "galleryBanner": {
+    "color": "#111318",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/Roxter2494/Minecraft-Language-Editor#readme",
+  "bugs": {
+    "url": "https://github.com/Roxter2494/Minecraft-Language-Editor/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Roxter2494/Minecraft-Language-Editor.git"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Language Packs"
+  ],
+  "keywords": [
+    "minecraft",
+    "bedrock",
+    "lang",
+    "translation",
+    "traduccion",
+    "resource pack"
+  ],
+  "activationEvents": [
+    "onCommand:minecraftLangEditor.open",
+    "onCommand:minecraftLangEditor.openFolder",
+    "onCommand:minecraftLangEditor.inheritPrevious",
+    "onCommand:minecraftLangEditor.compareFolders",
+    "onCommand:minecraftLangEditor.detectTexts",
+    "onCommand:minecraftLangEditor.editGlossary",
+    "onCommand:minecraftLangEditor.reviewNames",
+    "onCommand:minecraftLangEditor.translateAI",
+    "onCommand:minecraftLangEditor.reviewAI",
+    "onCommand:minecraftLangEditor.configureAI"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "minecraftLangEditor.open",
+        "title": "%command.open%",
+        "category": "Minecraft Bedrock Language Editor",
+        "icon": {
+          "light": "media/icon-interface-v5.png",
+          "dark": "media/icon-interface-v5.png"
+        }
+      },
+      {
+        "command": "minecraftLangEditor.openFolder",
+        "title": "%command.openFolder%",
+        "category": "Minecraft Bedrock Language Editor"
+      },
+      {
+        "command": "minecraftLangEditor.inheritPrevious",
+        "title": "%command.inheritPrevious%",
+        "category": "Minecraft Bedrock Language Editor"
+      },
+      {
+        "command": "minecraftLangEditor.compareFolders",
+        "title": "%command.compareFolders%",
+        "category": "Minecraft Bedrock Language Editor"
+      },
+      {
+        "command": "minecraftLangEditor.detectTexts",
+        "title": "%command.detectTexts%",
+        "category": "Minecraft Bedrock Language Editor"
+      },
+      {
+        "command": "minecraftLangEditor.editGlossary",
+        "title": "%command.editGlossary%",
+        "category": "Minecraft Bedrock Language Editor"
+      },
+      {
+        "command": "minecraftLangEditor.reviewNames",
+        "title": "%command.reviewNames%",
+        "category": "Minecraft Bedrock Language Editor"
+      },
+      {
+        "command": "minecraftLangEditor.translateAI",
+        "title": "%command.translateAI%",
+        "category": "Minecraft Bedrock Language Editor"
+      },
+      {
+        "command": "minecraftLangEditor.reviewAI",
+        "title": "%command.reviewAI%",
+        "category": "Minecraft Bedrock Language Editor"
+      },
+      {
+        "command": "minecraftLangEditor.configureAI",
+        "title": "%command.configureAI%",
+        "category": "Minecraft Bedrock Language Editor"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "minecraftLangEditor.compareFolders",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c"
+      },
+      {
+        "command": "minecraftLangEditor.detectTexts",
+        "key": "ctrl+alt+t",
+        "mac": "cmd+alt+t"
+      },
+      {
+        "command": "minecraftLangEditor.editGlossary",
+        "key": "ctrl+alt+g",
+        "mac": "cmd+alt+g"
+      },
+      {
+        "command": "minecraftLangEditor.reviewNames",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n"
+      },
+      {
+        "command": "minecraftLangEditor.translateAI",
+        "key": "ctrl+alt+i",
+        "mac": "cmd+alt+i"
+      },
+      {
+        "command": "minecraftLangEditor.reviewAI",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "minecraftLangEditor.open",
+          "when": "resourceExtname == .lang",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Minecraft Bedrock Language Editor",
+      "properties": {
+        "minecraftLangEditor.idiomaDestino": {
+          "type": "string",
+          "default": "es_ES",
+          "description": "%config.idiomaDestino.description%"
+        },
+        "minecraftLangEditor.crearBackups": {
+          "type": "boolean",
+          "default": true,
+          "description": "%config.crearBackups.description%"
+        },
+        "minecraftLangEditor.conservarBackups": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "%config.conservarBackups.description%"
+        },
+        "minecraftLangEditor.preguntarIdiomaHermano": {
+          "type": "boolean",
+          "default": true,
+          "description": "%config.preguntarIdiomaHermano.description%"
+        },
+        "minecraftLangEditor.coloresClaves": {
+          "type": "boolean",
+          "default": true,
+          "description": "%config.coloresClaves.description%"
+        },
+        "minecraftLangEditor.fontSize": {
+          "type": "number",
+          "default": 13,
+          "minimum": 8,
+          "maximum": 40,
+          "description": "%config.fontSize.description%"
+        },
+        "minecraftLangEditor.rowHeight": {
+          "type": "number",
+          "default": 27,
+          "minimum": 18,
+          "maximum": 100,
+          "description": "%config.rowHeight.description%"
+        },
+        "minecraftLangEditor.idiomaUi": {
+          "type": "string",
+          "enum": ["es", "pt-BR", "en"],
+          "enumDescriptions": [
+            "%config.idiomaUi.enum.es%",
+            "%config.idiomaUi.enum.ptBR%",
+            "%config.idiomaUi.enum.en%"
+          ],
+          "default": "es",
+          "description": "%config.idiomaUi.description%"
+        },
+        "minecraftLangEditor.modeloIA": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "%config.modeloIA.markdownDescription%"
+        },
+        "minecraftLangEditor.proveedorIA": {
+          "type": "string",
+          "enum": ["vscode", "openai", "anthropic", "google", "compatible"],
+          "enumDescriptions": [
+            "%config.proveedorIA.enum.vscode%",
+            "%config.proveedorIA.enum.openai%",
+            "%config.proveedorIA.enum.anthropic%",
+            "%config.proveedorIA.enum.google%",
+            "%config.proveedorIA.enum.compatible%"
+          ],
+          "default": "vscode",
+          "description": "%config.proveedorIA.description%"
+        },
+        "minecraftLangEditor.modeloApi": {
+          "type": "string",
+          "default": "",
+          "description": "%config.modeloApi.description%"
+        },
+        "minecraftLangEditor.urlBaseIA": {
+          "type": "string",
+          "default": "",
+          "description": "%config.urlBaseIA.description%"
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "minecraft-lang",
+        "aliases": [
+          "Minecraft Lang",
+          "lang"
+        ],
+        "extensions": [
+          ".lang"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "minecraft-lang",
+        "scopeName": "source.minecraft-lang",
+        "path": "./syntaxes/minecraft-lang.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.mjs --production",
+    "compile": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "package": "npm run build && vsce package --no-dependencies",
+    "publish": "vsce publish --no-dependencies",
+    "publish:patch": "vsce publish patch --no-dependencies",
+    "publish:minor": "vsce publish minor --no-dependencies",
+    "publish:major": "vsce publish major --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/vscode": "1.90.0",
+    "@vscode/vsce": "^4.1.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}
