@@ -57,6 +57,7 @@ let state: EditorState | null = null;
 let rows: FilaLang[] = [];
 let visibles: FilaLang[] = [];
 let values = new Map<string, string>();
+let filaPorClave = new Map<string, FilaLang>();
 let inputPorClave = new Map<string, HTMLTextAreaElement>();
 let renderLimit = PAGE;
 let dirty = false;
@@ -151,9 +152,15 @@ selModelo.addEventListener('change', () => {
   vscode.postMessage({ type: 'setModel', id: selModelo.value });
 });
 
+let temporizadorBusqueda: number | null = null;
 txtBuscar.addEventListener('input', () => {
-  renderLimit = PAGE;
-  render();
+  // Con tablas grandes, filtrar en cada tecla bloquea la interfaz: se agrupa.
+  if (temporizadorBusqueda !== null) window.clearTimeout(temporizadorBusqueda);
+  temporizadorBusqueda = window.setTimeout(() => {
+    temporizadorBusqueda = null;
+    renderLimit = PAGE;
+    render();
+  }, 150);
 });
 chkSinTraducir.addEventListener('change', () => {
   renderLimit = PAGE;
@@ -307,6 +314,7 @@ function aplicarEstado(nuevo: EditorState): void {
   rows = nuevo.rows;
   if (!rows.some((r) => r.key === ultimaClave)) ultimaClave = '';
   values = new Map(rows.map((r) => [r.key, r.value]));
+  filaPorClave = new Map(rows.map((r) => [r.key, r]));
   renderLimit = PAGE;
 
   aplicarIdioma(nuevo);
@@ -521,8 +529,8 @@ function render(): void {
 
   tbody.appendChild(fragment);
 
-  // Ajusta la altura de cada textarea a su contenido (textos largos envueltos).
-  for (const area of inputPorClave.values()) autoajustarArea(area);
+  // Ajusta la altura de los textareas con un solo cálculo de layout.
+  autoajustarAreas(inputPorClave.values());
 
   if (rows.length === 0) {
     vacioEl.style.display = 'block';
@@ -559,15 +567,43 @@ function valorDe(key: string): string {
   return values.get(key) ?? '';
 }
 
-/** Ajusta la altura de un textarea al texto que contiene. */
-function autoajustarArea(area: HTMLTextAreaElement): void {
-  area.style.height = 'auto';
-  area.style.height = `${Math.max(area.scrollHeight, 26)}px`;
+/**
+ * Ajusta la altura de varios textareas con un solo cálculo de layout.
+ * Medir uno por uno fuerza un reflow por fila y bloquea la interfaz con
+ * archivos grandes (miles de entradas).
+ */
+function autoajustarAreas(areas: Iterable<HTMLTextAreaElement>): void {
+  const lista = Array.from(areas);
+  if (lista.length === 0) return;
+  for (const area of lista) area.style.height = 'auto';
+
+  // Altura de una sola línea con la fuente y el padding actuales (la fuente es
+  // configurable desde los ajustes de la extensión).
+  const estilo = window.getComputedStyle(lista[0]);
+  const altoLinea = parseFloat(estilo.lineHeight);
+  const relleno = parseFloat(estilo.paddingTop) + parseFloat(estilo.paddingBottom);
+  const unaLinea = Number.isFinite(altoLinea) ? Math.ceil(altoLinea + relleno) : 26;
+
+  const alturas = lista.map((area) => {
+    const contenido = area.scrollHeight;
+    // Si el texto se parte en varias líneas se añaden 3 px: con la altura
+    // exacta puede aparecer la barra vertical aunque se vea todo el texto.
+    const extra = contenido > unaLinea + 1 ? 3 : 0;
+    return Math.max(contenido, 26) + extra;
+  });
+  for (let i = 0; i < lista.length; i++) {
+    lista[i].style.height = `${alturas[i]}px`;
+  }
 }
 
-function setValor(key: string, valor: string): void {
+/** Ajusta la altura de un textarea al texto que contiene. */
+function autoajustarArea(area: HTMLTextAreaElement): void {
+  autoajustarAreas([area]);
+}
+
+function setValor(key: string, valor: string, afectadas?: HTMLTextAreaElement[]): void {
   values.set(key, valor);
-  const row = rows.find((r) => r.key === key);
+  const row = filaPorClave.get(key);
   if (row) {
     row.value = valor;
     if (valor) row.estado = 'traducida';
@@ -575,7 +611,9 @@ function setValor(key: string, valor: string): void {
   const input = inputPorClave.get(key);
   if (input) {
     input.value = valor;
-    autoajustarArea(input);
+    // En operaciones masivas se ajusta la altura una sola vez al final.
+    if (afectadas) afectadas.push(input);
+    else autoajustarArea(input);
     const tr = input.closest('tr');
     if (tr && row) {
       tr.classList.remove(
@@ -718,14 +756,16 @@ function guardar(): void {
 }
 
 function copiarFila(key: string): void {
-  const row = rows.find((r) => r.key === key);
+  const row = filaPorClave.get(key);
   if (!row) return;
 
   const texto = row.source;
-  setValor(key, texto);
+  const afectadas: HTMLTextAreaElement[] = [];
+  setValor(key, texto, afectadas);
   for (const r of rows) {
-    if (r.source === texto && !valorDe(r.key)) setValor(r.key, texto);
+    if (r.source === texto && !valorDe(r.key)) setValor(r.key, texto, afectadas);
   }
+  autoajustarAreas(afectadas);
 
   setDirty(true);
   registrarCambio();
@@ -826,8 +866,14 @@ window.addEventListener('pagehide', () => {
 });
 
 // Al cambiar el ancho de la ventana, el texto se reajusta a nuevas líneas.
+let temporizadorResize: number | null = null;
 window.addEventListener('resize', () => {
-  for (const area of inputPorClave.values()) autoajustarArea(area);
+  // Redimensionar dispara muchos eventos: se agrupan en un solo ajuste.
+  if (temporizadorResize !== null) window.clearTimeout(temporizadorResize);
+  temporizadorResize = window.setTimeout(() => {
+    temporizadorResize = null;
+    autoajustarAreas(inputPorClave.values());
+  }, 150);
 });
 
 function setEstado(texto: string): void {

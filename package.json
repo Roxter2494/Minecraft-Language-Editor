@@ -3,7 +3,7 @@
   "name": "minecraft-bedrock-language-editor",
   "displayName": "Minecraft Bedrock Language Editor",
   "description": "Editor de archivos .lang de Minecraft Bedrock: tabla origen/destino con búsqueda y filtro, herencia de versiones, comparación de carpetas, detección de textos, traducción y revisión con IA, glosario, nombres propios, borrador persistente, backups con rotación, languages.json, sincronización es_ES/es_MX, resaltado de sintaxis y colores por familia de claves.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "publisher": "Roxter",
   "author": "Roxter",
   "license": "GPL-3.0-or-later",

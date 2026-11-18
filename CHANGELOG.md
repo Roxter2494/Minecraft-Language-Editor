@@ -4,6 +4,21 @@ Todos los cambios importantes de la extensión se documentan aquí.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/)
 y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
+## [0.6.1] - 2026-11-18
+
+### Corregido
+
+- El editor podía quedarse bloqueado al abrir un `.lang` con muchas entradas: la
+  altura de cada campo de texto se medía por separado y forzaba un recálculo de
+  layout por fila. Ahora se mide en una sola pasada, así que la tabla aparece de
+  inmediato.
+- El buscador y el redimensionado de la ventana agrupan los cambios para no
+  rehacer la tabla en cada pulsación o movimiento.
+- Al copiar el texto original a las filas repetidas, la altura se ajusta una sola
+  vez en lugar de una vez por fila.
+- Los textos largos que se parten en varias líneas reciben 3 px extra de altura
+  para que no aparezca la barra deslizadora aunque se vea el texto completo.
+
 ## [0.6.0] - 2026-11-17
 
 ### Cambiado

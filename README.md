@@ -14,7 +14,7 @@ persistente, backups con rotación, `languages.json`, sincronización `es_ES` �
 
 ### Funciones
 
-Esta es la **versión 0.6.0**. Incluye:
+Esta es la **versión 0.6.1**. Incluye:
 
 - Abrir una carpeta `texts` (o la raíz del pack; entra solo en `texts`).
 - Selector de idioma **origen** (solo códigos con archivo `.lang`).
@@ -145,7 +145,7 @@ destaque de sintaxe e cores por família de chaves.
 
 ### Recursos
 
-Esta é a **versão 0.6.0**. Inclui:
+Esta é a **versão 0.6.1**. Inclui:
 
 - Abrir uma pasta `texts` (ou a raiz do pacote; entra automaticamente em
   `texts`).
@@ -281,7 +281,7 @@ key-family colors.
 
 ### Features
 
-This is version **0.6.0**. It includes:
+This is version **0.6.1**. It includes:
 
 - Open a `texts` folder (or the pack root; it enters `texts` automatically).
 - **Source** language selector (only codes that have a `.lang` file).
